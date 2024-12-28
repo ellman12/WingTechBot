@@ -9,8 +9,8 @@ How much karma different emotes give.
 ### Reactions
 Stores every reaction for every emote.
 
-| Id  | Giver (refs Users.Id) | Receiver (refs Users.Id) | Emote | MessageId | Timestamp (UTC) |
-| --- | --------------------- | ------------------------ | ----- | --------- | --------------- |
+| Id  | Giver (refs Users.Id) | Receiver (refs Users.Id) | MessageId | Emote | Timestamp (UTC) |
+| --- | --------------------- | ------------------------ | --------- | ----- | --------------- |
 
 ## Operations
 - Add reaction
