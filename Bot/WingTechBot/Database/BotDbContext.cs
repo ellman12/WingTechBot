@@ -4,6 +4,7 @@
 public sealed class BotDbContext : DbContext
 {
     //Tables
+    public DbSet<KarmaEmote> KarmaEmotes { get; set; }
     public DbSet<Reaction> Reactions { get; set; }
     
     ///Configures the database.

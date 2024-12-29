@@ -10,6 +10,8 @@
     
     <!-- Global usings -->
     <ItemGroup>
+        <Using Include="Discord"/>
+        
         <Using Include="NUnit.Framework"/>
         <Using Include="Microsoft.EntityFrameworkCore"/>
 

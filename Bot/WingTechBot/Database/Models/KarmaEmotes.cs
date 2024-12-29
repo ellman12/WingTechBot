@@ -1,10 +1,27 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace WingTechBot.Database.Models;
 
 ///Represents an emote that has a karma value.
-public sealed class KarmaEmote(Emote emote, int amount) : Model
+public sealed class KarmaEmote(string emote, int amount) : Model
 {
-	public Emote Emote { get; } = emote;
+	///<summary>Represents a Discord emote in the format of either :thumbsup: or &lt;:name:id&gt;</summary>
+	///<remarks>For more details: https://docs.discordnet.dev/guides/emoji/emoji.html?q=Emote</remarks>
+	[Key]
+	public string Emote { get; private set; } = emote;
 
-	public int Amount { get; } = amount;
-	
+	[Required]
+	public int Amount { get; private set; } = amount;
+
+	[NotMapped]
+	public Emote ParsedEmote => Discord.Emote.Parse(Emote);
+
+	public static async Task<KarmaEmote> AddKarmaEmote(string emote, int amount)
+	{
+		await using BotDbContext context = new();
+		KarmaEmote karmaEmote = new(emote, amount);
+		await context.KarmaEmotes.AddAsync(karmaEmote);
+		await context.SaveChangesAsync();
+		return karmaEmote;
+	}
 }
