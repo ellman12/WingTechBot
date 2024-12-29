@@ -23,6 +23,18 @@ public sealed class KarmaEmotesTests : ModelTests
 		Assert.IsNull(await context.KarmaEmotes.FirstOrDefaultAsync(karmaEmote => karmaEmote.Emote == emote));
 	}
 
+	[TestCase(""), TestCase("cheese"), TestCase("69420")]
+	public void KarmaEmotes_AddNewEmote_InvalidString(string invalidEmote)
+	{
+		Assert.ThrowsAsync<FormatException>(async () => await KarmaEmote.AddKarmaEmote(invalidEmote, 0));
+	}
+	
+	[TestCase(""), TestCase("cheese"), TestCase("69420")]
+	public void KarmaEmotes_RemoveEmote_InvalidString(string invalidEmote)
+	{
+		Assert.ThrowsAsync<FormatException>(async () => await KarmaEmote.RemoveKarmaEmote(invalidEmote));
+	}
+
 	private static async Task<KarmaEmote> CreateKarmaEmote(string emote, int amount)
 	{
 		await using BotDbContext context = new();
