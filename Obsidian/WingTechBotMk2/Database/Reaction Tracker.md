@@ -29,6 +29,9 @@ Stores every reaction for every emote.
 - Get all reactions sent to all users for the year (or any year)
 - Get all reactions sent to all users for all time
 
+- Get all reactions sent by all users for the year (or any year)
+- Get all reactions sent by all users for all time
+
 ### Karma
 - Get all karma from a user for the year (or any year)
 - Get all karma from a user for all time
@@ -39,6 +42,9 @@ Stores every reaction for every emote.
 - Get all karma sent to a user for all time
 - Get all karma sent to all users for the year (or any year)
 - Get all karma sent to all users for all time
+
+- Get total karma for all users for the year (or any year)
+- Get total karma for all users for all time
 
 #### KarmaEmotes
 - Add emote to KarmaEmotes
