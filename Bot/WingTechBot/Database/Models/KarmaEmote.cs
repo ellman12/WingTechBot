@@ -24,4 +24,12 @@ public sealed class KarmaEmote(string emote, int amount) : Model
 		await context.SaveChangesAsync();
 		return karmaEmote;
 	}
+
+	public static async Task RemoveKarmaEmote(string emote)
+	{
+		await using BotDbContext context = new();
+		var emoteToRemove = await context.KarmaEmotes.FirstOrDefaultAsync(karmaEmote => karmaEmote.Emote == emote);
+		context.KarmaEmotes.Remove(emoteToRemove);
+		await context.SaveChangesAsync();
+	}
 }
