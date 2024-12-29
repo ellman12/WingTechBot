@@ -1,18 +1,23 @@
 namespace WingTechBot.Database.Models;
 
 ///Represents an emote reaction to a message.
-public sealed class Reaction(int id, ulong giverId, ulong receiverId, ulong messageId, Emote emote, DateTime timestamp) : Model
+public sealed class Reaction(int id, ulong giverId, ulong receiverId, ulong messageId, string emote, DateTime timestamp) : Model
 {
-	public int Id { get; } = id;
+	[Key]
+	public int Id { get; private set; } = id;
 
-	public ulong GiverId { get; } = giverId;
+	[Required]
+	public ulong GiverId { get; private set; } = giverId;
 
-	public ulong ReceiverId { get; } = receiverId;
+	[Required]
+	public ulong ReceiverId { get; private set; } = receiverId;
 
-	public ulong MessageId { get; } = messageId;
-	
-	public Emote Emote { get; } = emote;
+	[Required]
+	public ulong MessageId { get; private set; } = messageId;
 
-	public DateTime Timestamp { get; } = timestamp;
+	[Required]
+	public string Emote { get; private set; } = emote;
 
+	[Required]
+	public DateTime Timestamp { get; private set; } = timestamp;
 }
