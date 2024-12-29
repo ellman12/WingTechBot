@@ -18,6 +18,8 @@ public sealed class KarmaEmote(string emote, int amount) : Model
 
 	public static async Task<KarmaEmote> AddKarmaEmote(string emote, int amount)
 	{
+		ValidateEmoteString(emote);
+		
 		await using BotDbContext context = new();
 		KarmaEmote karmaEmote = new(emote, amount);
 		await context.KarmaEmotes.AddAsync(karmaEmote);
@@ -27,9 +29,19 @@ public sealed class KarmaEmote(string emote, int amount) : Model
 
 	public static async Task RemoveKarmaEmote(string emote)
 	{
+		ValidateEmoteString(emote);
+		
 		await using BotDbContext context = new();
 		var emoteToRemove = await context.KarmaEmotes.FirstOrDefaultAsync(karmaEmote => karmaEmote.Emote == emote);
 		context.KarmaEmotes.Remove(emoteToRemove);
 		await context.SaveChangesAsync();
+	}
+
+	private static bool ValidateEmoteString(string emote)
+	{
+		if (!Emoji.TryParse(emote, out _) && !Discord.Emote.TryParse(emote, out _))
+			throw new FormatException("Emote string not in valid format");
+
+		return true;
 	}
 }
