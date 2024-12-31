@@ -27,6 +27,20 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, s
 		return await context.Reactions.FirstOrDefaultAsync(r => r.GiverId == giverId && r.ReceiverId == receiverId && r.MessageId == messageId && r.Emote == emote);
 	}
 
+	public static async Task AddReaction(ulong giverId, ulong receiverId, ulong messageId, string emote)
+	{
+		await using BotDbContext context = new();
+		Reaction reaction = new(giverId, receiverId, messageId, emote);
+
+		var existingReaction = await Find(giverId, receiverId, messageId, emote);
+		if (existingReaction != null)
+			throw new ArgumentException("A reaction with these values already exists");
+
+		await context.Reactions.AddAsync(reaction);
+		await context.SaveChangesAsync();
+	}
+}
+
 public sealed class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
 {
 	public void Configure(EntityTypeBuilder<Reaction> builder)
