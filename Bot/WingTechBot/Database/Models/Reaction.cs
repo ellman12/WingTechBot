@@ -21,6 +21,12 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, s
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public DateTime Timestamp { get; private set; }
 
+	public static async Task<Reaction> Find(ulong giverId, ulong receiverId, ulong messageId, string emote)
+	{
+		await using BotDbContext context = new();
+		return await context.Reactions.FirstOrDefaultAsync(r => r.GiverId == giverId && r.ReceiverId == receiverId && r.MessageId == messageId && r.Emote == emote);
+	}
+
 public sealed class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
 {
 	public void Configure(EntityTypeBuilder<Reaction> builder)
