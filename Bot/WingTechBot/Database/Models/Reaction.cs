@@ -27,5 +27,8 @@ public sealed class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
 	{
 		builder.Property(e => e.Id).ValueGeneratedOnAdd();
 		builder.Property(e => e.Timestamp).HasDefaultValueSql("now()");
+
+		//Adds a unique constraint for all four values. Throws error if violated. AddReaction() checks this before adding a row.
+		builder.HasIndex(e => new {e.GiverId, e.ReceiverId, e.MessageId, e.Emote}).IsUnique();
 	}
 }
