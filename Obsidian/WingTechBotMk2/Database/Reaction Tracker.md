@@ -60,8 +60,3 @@ I would like to try and make this as modular and generic as popular. Almost like
 - Get total karma for all users for the year (or any year)
 - Get total karma for all users for all time
 
-#### KarmaEmotes
-- Add emote to KarmaEmotes
-- Remove emote from KarmaEmotes
-- Modify amount
-
