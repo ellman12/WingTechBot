@@ -23,10 +23,10 @@ public sealed class ReactionEmote(string name, ulong? emoteId) : Model
 	[NotMapped]
 	public IEmote Parsed => EmoteId == null ? Emoji.Parse($":{Name}:") : Emote.Parse($"<:{Name}:{EmoteId}>");
 
-	public static async Task<ReactionEmote> FindByName(string name)
+	public static async Task<ReactionEmote> Find(string name, ulong? emoteId)
 	{
 		await using BotDbContext context = new();
-		return await context.ReactionEmotes.FirstOrDefaultAsync(e => e.Name == name);
+		return await context.ReactionEmotes.FirstOrDefaultAsync(e => e.Name == name && e.EmoteId == emoteId);
 	}
 
 	public static async Task AddEmote(string name, ulong? emoteId)
