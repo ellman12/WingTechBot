@@ -3,6 +3,14 @@ namespace BotTesting.DatabaseTests.ModelTests;
 [TestFixture]
 public sealed class ReactionEmoteTests : ModelTests
 {
+	[TestCase("upvote", 123ul, "<:upvote:123>")]
+	[TestCase("eyes", null, "👀")]
+	public void ReactionEmote_VerifyParsedValue(string name, ulong? emoteId, string expected)
+	{
+		ReactionEmote emote = new(name, emoteId);
+		Assert.True(emote.Parsed.ToString() == expected);
+	}
+	
 	[TestCase("upvote", 123456ul)]
 	[TestCase("downvote", 87589ul)]
 	[TestCase("eyes", null)]
