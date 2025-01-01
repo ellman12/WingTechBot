@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace WingTechBot.Database.Models;
 
 ///Represents a Discord emote used for the karma and reaction tracker systems.
