@@ -13,14 +13,6 @@ Both these values are from Discord. When combined into the form Discord uses the
 - CreatedAt (Auto Generated)
 
 
-### KarmaEmotes
-How much karma (+/-) different emotes give.
-
-- EmoteId (pkey)
-- Amount (int)
-- CreatedAt (Auto Generated)
-
-
 ### Reactions
 Stores every reaction by every user.
 
