@@ -20,6 +20,8 @@ public sealed class ReactionEmote(string name, ulong? emoteId, int karmaValue = 
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public DateTime CreatedAt { get; private init; }
 
+	public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+
 	///See: https://docs.discordnet.dev/guides/emoji/emoji.html
 	[NotMapped]
 	public IEmote Parsed => EmoteId == null ? Emoji.Parse($":{Name}:") : Emote.Parse($"<:{Name}:{EmoteId}>");
@@ -34,7 +36,9 @@ public sealed class ReactionEmote(string name, ulong? emoteId, int karmaValue = 
 	public static async Task<ReactionEmote> Find(string name, ulong? emoteId)
 	{
 		await using BotDbContext context = new();
-		return await context.ReactionEmotes.FirstOrDefaultAsync(e => e.Name == name && e.EmoteId == emoteId);
+		return await context.ReactionEmotes
+			.Include(re => re.Reactions)
+			.FirstOrDefaultAsync(e => e.Name == name && e.EmoteId == emoteId);
 	}
 
 	public static async Task<ReactionEmote> AddEmote(string name, ulong? emoteId, int karmaValue = 0)
