@@ -19,6 +19,10 @@ public sealed class ReactionEmote(string name, ulong? emoteId) : Model
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public DateTime CreatedAt { get; private init; }
 
+	///See: https://docs.discordnet.dev/guides/emoji/emoji.html
+	[NotMapped]
+	public IEmote Parsed => EmoteId == null ? Emoji.Parse($":{Name}:") : Emote.Parse($"<:{Name}:{EmoteId}>");
+
 	public static async Task<ReactionEmote> FindByName(string name)
 	{
 		await using BotDbContext context = new();
@@ -29,7 +33,7 @@ public sealed class ReactionEmote(string name, ulong? emoteId) : Model
 	{
 		if (String.IsNullOrWhiteSpace(name))
 			throw new ArgumentException("Invalid name");
-		
+
 		if (emoteId == 0)
 			throw new ArgumentException("Invalid id");
 
