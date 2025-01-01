@@ -29,7 +29,7 @@ public sealed class ReactionEmote(string name, ulong? emoteId) : Model
 		return await context.ReactionEmotes.FirstOrDefaultAsync(e => e.Name == name && e.EmoteId == emoteId);
 	}
 
-	public static async Task AddEmote(string name, ulong? emoteId)
+	public static async Task<ReactionEmote> AddEmote(string name, ulong? emoteId)
 	{
 		if (String.IsNullOrWhiteSpace(name))
 			throw new ArgumentException("Invalid name");
@@ -43,8 +43,10 @@ public sealed class ReactionEmote(string name, ulong? emoteId) : Model
 		if (existing != null)
 			throw new ArgumentException("Emote exists in ReactionEmote table");
 
-		await context.ReactionEmotes.AddAsync(new ReactionEmote(name, emoteId));
+		ReactionEmote emote = new(name, emoteId);
+		await context.ReactionEmotes.AddAsync(emote);
 		await context.SaveChangesAsync();
+		return emote;
 	}
 }
 
