@@ -17,7 +17,7 @@ public sealed class ReactionEmoteTests : ModelTests
 	public async Task ReactionEmote_AddEmote(string name, ulong? emoteId)
 	{
 		await ReactionEmote.AddEmote(name, emoteId);
-		Assert.NotNull(await ReactionEmote.FindByName(name));
+		Assert.NotNull(await ReactionEmote.Find(name, emoteId));
 	}
 	
 	[TestCase("upvote", 0u), TestCase("", 87589u)]
