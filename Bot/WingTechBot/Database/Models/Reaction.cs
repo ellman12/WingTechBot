@@ -31,6 +31,17 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, i
 			.FirstOrDefaultAsync(e => e.GiverId == giverId && e.ReceiverId == receiverId && e.MessageId == messageId && e.EmoteId == emoteId);
 	}
 
+	public static async Task<Reaction> AddReaction(ulong giverId, ulong receiverId, ulong messageId, int emoteId)
+	{
+		if (giverId == 0 || receiverId == 0 || messageId == 0 || emoteId == 0)
+			throw new ArgumentException("Invalid ID");
+
+		await using BotDbContext context = new();
+		Reaction reaction = new(giverId, receiverId, messageId, emoteId);
+		await context.Reactions.AddAsync(reaction);
+		await context.SaveChangesAsync();
+		return reaction;
+	}
 }
 
 public sealed class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
