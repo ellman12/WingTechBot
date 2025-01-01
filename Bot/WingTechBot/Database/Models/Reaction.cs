@@ -31,13 +31,18 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, i
 			.FirstOrDefaultAsync(e => e.GiverId == giverId && e.ReceiverId == receiverId && e.MessageId == messageId && e.EmoteId == emoteId);
 	}
 
-	public static async Task<Reaction> AddReaction(ulong giverId, ulong receiverId, ulong messageId, int emoteId)
+	public static async Task<Reaction> AddReaction(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
 	{
-		if (giverId == 0 || receiverId == 0 || messageId == 0 || emoteId == 0)
-			throw new ArgumentException("Invalid ID");
+		if (giverId == 0 || receiverId == 0 || messageId == 0 || discordEmoteId == 0 || String.IsNullOrWhiteSpace(emoteName))
+			throw new ArgumentException("Invalid ID or emote name");
+		
+		var emote = await ReactionEmote.Find(emoteName, discordEmoteId) ?? await ReactionEmote.AddEmote(emoteName, discordEmoteId);
+
+		if (await Find(giverId, receiverId, messageId, emote.Id) != null)
+			throw new ArgumentException("Reaction exists");
 
 		await using BotDbContext context = new();
-		Reaction reaction = new(giverId, receiverId, messageId, emoteId);
+		Reaction reaction = new(giverId, receiverId, messageId, emote.Id);
 		await context.Reactions.AddAsync(reaction);
 		await context.SaveChangesAsync();
 		return reaction;
