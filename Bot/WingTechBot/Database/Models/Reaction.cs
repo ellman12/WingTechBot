@@ -55,6 +55,22 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, i
 		await context.SaveChangesAsync();
 		return reaction;
 	}
+
+	public static async Task RemoveReaction(ulong giverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	{
+		if (giverId == 0 ||  messageId == 0 || discordEmoteId == 0 || String.IsNullOrWhiteSpace(emoteName))
+			throw new ArgumentException("Invalid ID or emote name");
+		
+		var emote = await ReactionEmote.Find(emoteName, discordEmoteId) ?? await ReactionEmote.AddEmote(emoteName, discordEmoteId);
+		
+		if (await Find(giverId, messageId, emote.Id) == null)
+			throw new ArgumentException("Reaction does not exist");
+		
+		await using BotDbContext context = new();
+		var reaction = await Find(giverId, messageId, emote.Id);
+		context.Reactions.Remove(reaction);
+		await context.SaveChangesAsync();
+	}
 }
 
 public sealed class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
