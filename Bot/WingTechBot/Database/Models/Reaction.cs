@@ -1,7 +1,7 @@
 namespace WingTechBot.Database.Models;
 
 ///Represents a reaction to a Discord message.
-public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, int emoteId) : Model
+public sealed partial class Reaction(ulong giverId, ulong receiverId, ulong messageId, int emoteId) : Model
 {
 	[Key]
 	public int Id { get; private init; }
