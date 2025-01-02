@@ -3,9 +3,14 @@ namespace BotTesting.DatabaseTests.ModelTests;
 [TestFixture]
 public sealed class ReactionTests : ModelTests
 {
+	public static IEnumerable<TestCaseData> TestCases()
+	{
+		yield return new TestCaseData(123ul, 456ul, 789ul, "upvote", 8947589432758943ul);
+		yield return new TestCaseData(123ul, 456ul, 789ul, "eyes", null);
+	}
+
 	#region AddReaction
-	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	[Test, TestCaseSource(nameof(TestCases))]
 	public async Task Reaction_AddReaction_ReactionEmoteDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await Reaction.AddReaction(giverId, receiverId, messageId, emoteName, discordEmoteId);
@@ -18,8 +23,7 @@ public sealed class ReactionTests : ModelTests
 		Assert.True(reaction.Emote.Name == emote.Name);
 	}
 
-	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	[Test, TestCaseSource(nameof(TestCases))]
 	public async Task Reaction_AddReaction_ReactionEmoteExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await ReactionEmote.AddEmote(emoteName, discordEmoteId);
@@ -33,8 +37,7 @@ public sealed class ReactionTests : ModelTests
 		Assert.True(reaction.Emote.Name == emote.Name);
 	}
 
-	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	[Test, TestCaseSource(nameof(TestCases))]
 	public async Task Reaction_AddReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await Reaction.AddReaction(giverId, receiverId, messageId, emoteName, discordEmoteId);
@@ -50,8 +53,7 @@ public sealed class ReactionTests : ModelTests
 	#endregion
 
 	#region RemoveReaction
-	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	[Test, TestCaseSource(nameof(TestCases))]
 	public async Task Reaction_RemoveReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		foreach (int i in Enumerable.Range(1, 4))
@@ -73,8 +75,7 @@ public sealed class ReactionTests : ModelTests
 		Assert.True(context.Reactions.OrderBy(r => r.MessageId).Last().MessageId == messageId - 1);
 	}
 
-	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	[Test, TestCaseSource(nameof(TestCases))]
 	public async Task Reaction_RemoveReaction_ReactionDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await using BotDbContext context = new();
