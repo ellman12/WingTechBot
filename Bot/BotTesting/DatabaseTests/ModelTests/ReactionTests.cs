@@ -5,7 +5,8 @@ public sealed class ReactionTests : ModelTests
 {
 	#region AddReaction
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	public async Task Reaction_AddReaction_ReactionEmoteDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	public async Task Reaction_AddReaction_ReactionEmoteDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await Reaction.AddReaction(giverId, receiverId, messageId, emoteName, discordEmoteId);
 		var emote = await ReactionEmote.Find(emoteName, discordEmoteId);
@@ -18,7 +19,8 @@ public sealed class ReactionTests : ModelTests
 	}
 
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	public async Task Reaction_AddReaction_ReactionEmoteExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	public async Task Reaction_AddReaction_ReactionEmoteExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await ReactionEmote.AddEmote(emoteName, discordEmoteId);
 		var emote = await ReactionEmote.Find(emoteName, discordEmoteId);
@@ -32,7 +34,8 @@ public sealed class ReactionTests : ModelTests
 	}
 
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	public async Task Reaction_AddReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	public async Task Reaction_AddReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await Reaction.AddReaction(giverId, receiverId, messageId, emoteName, discordEmoteId);
 
@@ -48,7 +51,8 @@ public sealed class ReactionTests : ModelTests
 
 	#region RemoveReaction
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	public async Task Reaction_RemoveReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	public async Task Reaction_RemoveReaction_ReactionExists(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		foreach (int i in Enumerable.Range(1, 4))
 		{
@@ -70,7 +74,8 @@ public sealed class ReactionTests : ModelTests
 	}
 
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
-	public async Task Reaction_RemoveReaction_ReactionDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	[TestCase(123ul, 456ul, 789ul, "eyes", null)]
+	public async Task Reaction_RemoveReaction_ReactionDoesNotExist(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
 		await using BotDbContext context = new();
 		Assert.IsEmpty(context.Reactions);
