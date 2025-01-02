@@ -13,6 +13,8 @@ public static class ReactionSeeder
 
 	public static async Task Seed(int amount, ulong startGiverId, ulong startReceiverId, ulong startMessageId)
 	{
+		await using BotDbContext context = new();
+
 		ulong giverId = startGiverId;
 		ulong receiverId = startReceiverId;
 		ulong messageId = startMessageId;
@@ -38,6 +40,18 @@ public static class ReactionSeeder
 			await Reaction.AddReaction(giverId, receiverId, messageId, emote.Name, emote.DiscordEmoteId);
 		}
 
-		messageId *= 2;
+		//Reactions for last year.
+		giverId *= 2;
+		receiverId *= 2;
+		foreach (int i in Enumerable.Range(1, amount))
+		{
+			messageId *= 2;
+			
+			foreach (var emote in emotes)
+			{
+				await Reaction.AddReaction(giverId, receiverId, messageId, emote.Name, emote.DiscordEmoteId);
+			}
+		}	
+		await context.Database.ExecuteSqlRawAsync($"UPDATE \"Reactions\" SET \"CreatedAt\" = \"CreatedAt\" - INTERVAL '1 year' WHERE \"GiverId\" = {giverId};");
 	}
 }
