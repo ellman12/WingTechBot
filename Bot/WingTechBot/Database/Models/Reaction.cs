@@ -39,9 +39,9 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, i
 			.FirstOrDefaultAsync(e => e.GiverId == giverId && e.ReceiverId == receiverId && e.MessageId == messageId && e.EmoteId == emoteId);
 	}
 
-	public static async Task<Reaction> AddReaction(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	public static async Task<Reaction> AddReaction(ulong giverId, ulong receiverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
-		if (giverId == 0 || receiverId == 0 || messageId == 0 || discordEmoteId == 0 || String.IsNullOrWhiteSpace(emoteName))
+		if (giverId == 0 || receiverId == 0 || messageId == 0 || String.IsNullOrWhiteSpace(emoteName))
 			throw new ArgumentException("Invalid ID or emote name");
 		
 		var emote = await ReactionEmote.Find(emoteName, discordEmoteId) ?? await ReactionEmote.AddEmote(emoteName, discordEmoteId);
@@ -56,9 +56,9 @@ public sealed class Reaction(ulong giverId, ulong receiverId, ulong messageId, i
 		return reaction;
 	}
 
-	public static async Task RemoveReaction(ulong giverId, ulong messageId, string emoteName, ulong discordEmoteId)
+	public static async Task RemoveReaction(ulong giverId, ulong messageId, string emoteName, ulong? discordEmoteId)
 	{
-		if (giverId == 0 ||  messageId == 0 || discordEmoteId == 0 || String.IsNullOrWhiteSpace(emoteName))
+		if (giverId == 0 ||  messageId == 0 || String.IsNullOrWhiteSpace(emoteName))
 			throw new ArgumentException("Invalid ID or emote name");
 		
 		var emote = await ReactionEmote.Find(emoteName, discordEmoteId) ?? await ReactionEmote.AddEmote(emoteName, discordEmoteId);
