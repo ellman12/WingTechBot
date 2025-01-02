@@ -13,6 +13,8 @@ public sealed class ReactionTests : ModelTests
 
 		var reaction = await Reaction.Find(giverId, receiverId, messageId, emote.Id);
 		Assert.NotNull(reaction);
+		
+		Assert.True(reaction.Emote.Name == emote.Name);
 	}
 
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
@@ -25,6 +27,8 @@ public sealed class ReactionTests : ModelTests
 		await Reaction.AddReaction(giverId, receiverId, messageId, emoteName, discordEmoteId);
 		var reaction = await Reaction.Find(giverId, receiverId, messageId, emote.Id);
 		Assert.NotNull(reaction);
+		
+		Assert.True(reaction.Emote.Name == emote.Name);
 	}
 
 	[TestCase(123ul, 456ul, 789ul, "upvote", 8947589432758943ul)]
