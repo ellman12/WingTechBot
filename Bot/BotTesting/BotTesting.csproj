@@ -12,6 +12,8 @@
     <ItemGroup>
         <Using Include="NUnit.Framework"/>
         <Using Include="Microsoft.EntityFrameworkCore"/>
+        
+        <Using Include="BotTesting.Seeders"/>
 
         <Using Include="WingTechBot"/>
         <Using Include="WingTechBot.Database"/>
