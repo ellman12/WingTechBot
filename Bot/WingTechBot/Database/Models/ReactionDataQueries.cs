@@ -14,4 +14,19 @@ public sealed partial class Reaction
 			.Select(g => (g.First().Emote, g.Count()))
 			.ToArray();
 	}
+
+	///Gets all reactions every user has received and the amount of each.
+	public static async Task<Dictionary<ulong, (ReactionEmote emote, int count)[]>> GetReactionsAllUsersReceived()
+	{
+		await using BotDbContext context = new();
+		return context.Reactions
+			.Include(r => r.Emote)
+			.GroupBy(r => r.ReceiverId)
+			.AsEnumerable()
+			.ToDictionary(idGroup => idGroup.Key, idGroup => idGroup
+				.GroupBy(r => r.Emote)
+				.Select(emoteGroup => (emoteGroup.Key, emoteGroup.Count()))
+				.ToArray()
+			);
+	}
 }
