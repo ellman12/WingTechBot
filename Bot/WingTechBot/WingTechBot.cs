@@ -8,12 +8,12 @@ public sealed class WingTechBot
 
 	public SocketTextChannel BotChannel { get; private set; }
 
-	public SlashCommandHandler CommandHandler { get; private set; }
-
 	public static readonly DiscordSocketConfig DiscordConfig = new() {MessageCacheSize = 100, AlwaysDownloadUsers = true};
 
 	private WingTechBot() {}
 
+	private readonly ReactionCommand reactionCommand = new();
+	
 	public static async Task<WingTechBot> Create()
 	{
 		WingTechBot bot = new();
@@ -23,6 +23,7 @@ public sealed class WingTechBot
 		await bot.Client.LoginAsync(TokenType.Bot, bot.Config.LoginToken);
 		await bot.Client.SetCustomStatusAsync(bot.Config.StatusMessage);
 		await bot.Client.StartAsync();
+
 		return bot;
 	}
 
@@ -33,9 +34,22 @@ public sealed class WingTechBot
 		if (BotChannel == null)
 			throw new NullReferenceException("Could not find bot channel");
 
-		CommandHandler = await SlashCommandHandler.Create(this);
-		Client.SlashCommandExecuted += CommandHandler.SlashCommandExecuted;
+		await SetUpCommands();
 
 		await BotChannel.SendMessageAsync("Bot started and ready");
+	}
+
+	private async Task SetUpCommands()
+	{
+		await ClearCommands();
+
+		await reactionCommand.SetUp(this);
+	}
+	
+	///Removes all slash commands from the bot. However, because Discord is terrible this is unreliable and often does nothing.
+	private async Task ClearCommands()
+	{
+		var guild = Client.GetGuild(Config.ServerId);
+		await guild.DeleteApplicationCommandsAsync();
 	}
 }
