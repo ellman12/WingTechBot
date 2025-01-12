@@ -25,6 +25,9 @@ public sealed class ReactionEmote(string name, ulong? discordEmoteId, int karmaV
 	[NotMapped]
 	public IEmote Parsed => DiscordEmoteId == null ? Emoji.Parse($":{Name}:") : Emote.Parse($"<:{Name}:{DiscordEmoteId}>");
 
+	///Convert this ReactionEmote into a string that Discord can interpret.
+	public override string ToString() => DiscordEmoteId == null ? $":{Name}:" : $"<:{Name}:{DiscordEmoteId}>";
+
 	public async Task SetKarmaValue(int newValue)
 	{
 		await using BotDbContext context = new();
