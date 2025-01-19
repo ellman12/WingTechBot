@@ -1,3 +1,5 @@
+using WingTechBot.Commands.Reactions;
+
 namespace WingTechBot;
 
 public sealed class WingTechBot
@@ -12,7 +14,7 @@ public sealed class WingTechBot
 
 	private WingTechBot() {}
 
-	private readonly ReactionCommand reactionCommand = new();
+	private readonly ReactionsCommand reactionsCommand = new();
 	
 	public static async Task<WingTechBot> Create()
 	{
@@ -43,7 +45,7 @@ public sealed class WingTechBot
 	{
 		await ClearCommands();
 
-		await reactionCommand.SetUp(this);
+		await reactionsCommand.SetUp(this);
 	}
 	
 	///Removes all slash commands from the bot. However, because Discord is terrible this is unreliable and often does nothing.
