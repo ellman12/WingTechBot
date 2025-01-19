@@ -67,12 +67,12 @@ public sealed class ReactionCommand : SlashCommand
 		string message;
 		if (reactions.Length > 0)
 		{
-			message = $"{command.User.Username}'s reactions received for {year}\n";
-			message = reactions.Aggregate(message, (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+			message = reactions.Aggregate($"{command.User.Username} received\n", (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+			message += $"in {year}";
 		}
 		else
 		{
-			message = $"No reactions for {year}";
+			message = $"No reactions received for {year}";
 		}
 
 		await command.FollowupAsync(message);
@@ -86,8 +86,8 @@ public sealed class ReactionCommand : SlashCommand
 		string message;
 		if (reactions.Length > 0)
 		{
-			message = $"{command.User.Username}'s reactions received from {giver.Username} for {year}\n";
-			message = reactions.Aggregate(message, (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+			message = reactions.Aggregate($"{command.User.Username} received\n", (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+			message += $"from {giver.Username} in {year}";
 		}
 		else
 		{
