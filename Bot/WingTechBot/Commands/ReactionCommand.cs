@@ -15,6 +15,11 @@ public sealed class ReactionCommand : SlashCommand
 				.WithDescription("Get reactions received from a user this year")
 				.WithType(ApplicationCommandOptionType.Mentionable)
 			)
+			.AddOption(new SlashCommandOptionBuilder()
+				.WithName("given-to")
+				.WithDescription("Get reactions given to a user this year")
+				.WithType(ApplicationCommandOptionType.Mentionable)
+			)
 		;
 
 		try
@@ -44,9 +49,13 @@ public sealed class ReactionCommand : SlashCommand
 		}
 
 		var first = options.First();
-		if (first.Name == "from" && first.Value is SocketGuildUser user)
+		if (first.Name == "from" && first.Value is SocketGuildUser giver)
 		{
-			await UserReactionsFromUserForYear(command, user);
+			await UserReactionsFromUserForYear(command, giver);
+		}
+		else if (first.Name == "given-to" && first.Value is SocketGuildUser receiver)
+		{
+			await UserReactionsGivenToUser(command, receiver);
 		}
 	}
 
@@ -83,6 +92,25 @@ public sealed class ReactionCommand : SlashCommand
 		else
 		{
 			message = $"No reactions received from {giver.Username} for {year}";
+		}
+
+		await command.FollowupAsync(message);
+	}
+	
+	private static async Task UserReactionsGivenToUser(SocketSlashCommand command, SocketGuildUser receiver)
+	{
+		int year = DateTime.Now.Year;
+		var reactions = await Reaction.GetReactionsUserGivenToUser(command.User.Id, receiver.Id, year);
+
+		string message;
+		if (reactions.Length > 0)
+		{
+			message = reactions.Aggregate($"{command.User.Username} has given\n", (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+			message += $"to {receiver.Username} in {year}";
+		}
+		else
+		{
+			message = $"No reactions given to {receiver.Username} for {year}";
 		}
 
 		await command.FollowupAsync(message);
