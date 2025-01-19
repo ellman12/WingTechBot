@@ -1,3 +1,5 @@
+using WingTechBot.Commands.Reaction;
+
 namespace WingTechBot;
 
 public sealed class WingTechBot
