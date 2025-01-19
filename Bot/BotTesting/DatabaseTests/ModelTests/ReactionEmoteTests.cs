@@ -5,7 +5,7 @@ public sealed class ReactionEmoteTests : ModelTests
 {
 	[TestCase("upvote", 123456ul, 1)]
 	[TestCase("downvote", 87589ul, -1)]
-	[TestCase("eyes", null, 0)]
+	[TestCase("👀", null, 0)]
 	public async Task ReactionEmote_SetKarmaValue(string name, ulong? discordEmoteId, int newValue)
 	{
 		await using BotDbContext context = new();
@@ -17,7 +17,7 @@ public sealed class ReactionEmoteTests : ModelTests
 	}
 
 	[TestCase("upvote", 123ul, "<:upvote:123>")]
-	[TestCase("eyes", null, "👀")]
+	[TestCase(":eyes:", null, "👀")]
 	public void ReactionEmote_VerifyParsedValue(string name, ulong? discordEmoteId, string expected)
 	{
 		ReactionEmote emote = new(name, discordEmoteId);
@@ -26,7 +26,7 @@ public sealed class ReactionEmoteTests : ModelTests
 
 	[TestCase("upvote", 123456ul)]
 	[TestCase("downvote", 87589ul)]
-	[TestCase("eyes", null)]
+	[TestCase("👀", null)]
 	public async Task ReactionEmote_AddEmote(string name, ulong? emoteId)
 	{
 		await ReactionEmote.AddEmote(name, emoteId);

@@ -7,7 +7,7 @@ public sealed class ReactionEmote(string name, ulong? discordEmoteId, int karmaV
 	[Key]
 	public int Id { get; private init; }
 
-	///The name of the emote, such as 'upvote' or 'eyes'.
+	///The name of the emote, such as 'upvote', :eyes:, or '👀'.
 	[Required]
 	public string Name { get; private init; } = name;
 
@@ -23,10 +23,10 @@ public sealed class ReactionEmote(string name, ulong? discordEmoteId, int karmaV
 
 	///See: https://docs.discordnet.dev/guides/emoji/emoji.html
 	[NotMapped]
-	public IEmote Parsed => DiscordEmoteId == null ? Emoji.Parse($":{Name}:") : Emote.Parse($"<:{Name}:{DiscordEmoteId}>");
+	public IEmote Parsed => DiscordEmoteId == null ? Emoji.Parse(Name) : Emote.Parse($"<:{Name}:{DiscordEmoteId}>");
 
 	///Convert this ReactionEmote into a string that Discord can interpret.
-	public override string ToString() => DiscordEmoteId == null ? $":{Name}:" : $"<:{Name}:{DiscordEmoteId}>";
+	public override string ToString() => DiscordEmoteId == null ? Name : $"<:{Name}:{DiscordEmoteId}>";
 
 	public async Task SetKarmaValue(int newValue)
 	{

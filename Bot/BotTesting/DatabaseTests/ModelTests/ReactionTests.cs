@@ -6,7 +6,10 @@ public sealed class ReactionTests : ModelTests
 	public static IEnumerable<TestCaseData> TestCases()
 	{
 		yield return new TestCaseData(123ul, 456ul, 789ul, "upvote", 8947589432758943ul);
-		yield return new TestCaseData(123ul, 456ul, 789ul, "eyes", null);
+		yield return new TestCaseData(123ul, 456ul, 789ul, "👌", null);
+		yield return new TestCaseData(123ul, 456ul, 789ul, "👌🏿", null);
+		yield return new TestCaseData(123ul, 456ul, 789ul, "🤷‍♂️", null);
+		yield return new TestCaseData(123ul, 456ul, 789ul, "🤷🏿‍♂️", null);
 	}
 
 	#region AddReaction
