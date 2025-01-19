@@ -14,6 +14,17 @@ public sealed class ReactionDataQueryTests : ModelTests
 		Assert.AreEqual(result.Length, expectedEmotes);
 		Assert.True(result.All(r => r.count == expectedAmountPerEmote));
 	}
+	
+	[TestCase(20, 10, 4, 6)]
+	[TestCase(40, 11, 1, 1)]
+	[TestCase(69, 420, 0, 0)]
+	public async Task GetReactionsUserReceivedFromUser(int receiverId, int giverId, int expectedEmotes, int expectedAmountPerEmote)
+	{
+		await ReactionSeeder.Seed(6, 10, 20, 40);
+		var result = await Reaction.GetReactionsUserReceivedFromUser((ulong) receiverId, (ulong)giverId);
+		Assert.AreEqual(result.Length, expectedEmotes);
+		Assert.True(result.All(r => r.count == expectedAmountPerEmote));
+	}
 
 	[TestCase(3)]
 	public async Task GetReactionsAllUsersReceived(int expectedGroups)

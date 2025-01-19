@@ -6,11 +6,16 @@ public sealed class ReactionCommand : SlashCommand
 	{
 		Bot = bot;
 		Bot.Client.SlashCommandExecuted += HandleCommand;
-		
+
 		var reactionsCommand = new SlashCommandBuilder()
 			.WithName("reactions")
 			.WithDescription("Shows totals for all reactions you have received this year")
-			;
+			.AddOption(new SlashCommandOptionBuilder()
+				.WithName("from")
+				.WithDescription("Get reactions received from a user this year")
+				.WithType(ApplicationCommandOptionType.Mentionable)
+			)
+		;
 
 		try
 		{
@@ -22,7 +27,7 @@ public sealed class ReactionCommand : SlashCommand
 			Logger.LogException(e);
 		}
 	}
-	
+
 	public override async Task HandleCommand(SocketSlashCommand command)
 	{
 		await PreprocessCommand(command);
@@ -35,6 +40,13 @@ public sealed class ReactionCommand : SlashCommand
 		if (options.Count == 0)
 		{
 			await UserReactionsForYear(command);
+			return;
+		}
+
+		var first = options.First();
+		if (first.Name == "from" && first.Value is SocketGuildUser user)
+		{
+			await UserReactionsFromUserForYear(command, user);
 		}
 	}
 
@@ -53,7 +65,26 @@ public sealed class ReactionCommand : SlashCommand
 		{
 			message = $"No reactions for {year}";
 		}
-		
+
+		await command.FollowupAsync(message);
+	}
+
+	private static async Task UserReactionsFromUserForYear(SocketSlashCommand command, SocketGuildUser giver)
+	{
+		int year = DateTime.Now.Year;
+		var reactions = await Reaction.GetReactionsUserReceivedFromUser(command.User.Id, giver.Id, year);
+
+		string message;
+		if (reactions.Length > 0)
+		{
+			message = $"{command.User.Username}'s reactions received from {giver.Username} for {year}\n";
+			message = reactions.Aggregate(message, (current, reaction) => current + $"* {reaction.count} {reaction.reactionEmote}\n");
+		}
+		else
+		{
+			message = $"No reactions received from {giver.Username} for {year}";
+		}
+
 		await command.FollowupAsync(message);
 	}
 }

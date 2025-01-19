@@ -14,6 +14,18 @@ public sealed partial class Reaction
 			.Select(g => (g.First().Emote, g.Count()))
 			.ToArray();
 	}
+	
+	public static async Task<(ReactionEmote reactionEmote, int count)[]> GetReactionsUserReceivedFromUser(ulong receiverId, ulong giverId, int? year = null)
+	{
+		await using BotDbContext context = new();
+		return context.Reactions
+			.Include(r => r.Emote)
+			.Where(r => r.ReceiverId == receiverId && r.GiverId == giverId && (year == null ? r.Emote.CreatedAt.Year > 0 : r.Emote.CreatedAt.Year == year))
+			.GroupBy(r => r.EmoteId)
+			.AsEnumerable()
+			.Select(g => (g.First().Emote, g.Count()))
+			.ToArray();
+	}
 
 	///Gets all reactions every user has received and the amount of each.
 	public static async Task<Dictionary<ulong, (ReactionEmote emote, int count)[]>> GetReactionsAllUsersReceived()
