@@ -45,6 +45,7 @@ public sealed class ReactionTracker
 	///Tries to get the ID of the user who sent the message via cache, but if the cache is empty, fetch the message first.
 	private static async Task<ulong> GetMessageAuthorId(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel)
 	{
+		//TODO: probably use GetOrDownloadAsync() here
 		return message.HasValue ? message.Value.Author.Id : (await channel.Value.GetMessageAsync(message.Id)).Author.Id;
 	}
 }

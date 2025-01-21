@@ -19,13 +19,14 @@ A rewrite of Ben's [WingTechBot](https://github.com/benjaminiserman/WingTechBot)
 - [ ] Create notes on how this was all setup
 - [ ] Research and do Agile and TDD stuff
 - [ ] [[Reaction Tracker]]
+- [ ] Get rid of all compiler warnings
 - [ ] Have people check the security of the bot
-- [ ] 
 
 ## Additional Features I'd Like
 - [ ] [[Quote System]]
 - [ ] [[Gato]] command
 - [ ] Other smaller commands like [[Random Number Generation]]
+- [ ] Adding a downvote to a message with an upvote or vice versa removes the existing reaction.
 
 ## Future Possibilities
 - [ ] Ability for it to join a voice channel and do... stuff idk. Play sounds, soundboard sounds, etc.
