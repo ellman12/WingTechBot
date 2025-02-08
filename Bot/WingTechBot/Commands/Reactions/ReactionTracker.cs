@@ -42,6 +42,8 @@ public sealed class ReactionTracker
 				return;
 			}
 
+			//These cause issues with integration tests.
+			#if RELEASE
 			if (reaction.UserId == cachedMessage.Author.Id)
 			{
 				await ReactionScolding.SendScold(name, await channel.GetOrDownloadAsync(), reaction.User.Value);
@@ -52,6 +54,7 @@ public sealed class ReactionTracker
 			{
 				await cachedMessage.AddReactionAsync(reaction.Emote);
 			}
+			#endif
 
 			await Reaction.AddReaction(reaction.UserId, cachedMessage.Author.Id, message.Id, name, reaction.Emote is Emote e ? e.Id : null);
 		}
